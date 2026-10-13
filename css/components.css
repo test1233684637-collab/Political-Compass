@@ -1,0 +1,336 @@
+/* CompassMatch — components: flash, tooltips, cards, language & guide */
+
+/* ---------- Answer flash overlay ---------- */
+
+#flash {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+}
+#flash.fire { animation: flashfade 0.5s ease-out; }
+@keyframes flashfade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------- Question term tooltips ---------- */
+
+.q-term {
+  position: relative;
+  display: inline-block;
+  color: var(--red);
+  border-bottom: 2px solid var(--red);
+  cursor: pointer;
+  font-weight: inherit;
+  transition: background 0.18s ease, color 0.18s ease;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+/* small "definition" affordance so it's clearly interactive */
+.q-term::after {
+  content: "?";
+  display: inline-block;
+  font-size: 0.62em;
+  font-weight: 800;
+  vertical-align: super;
+  margin-left: 1px;
+  opacity: 0.75;
+}
+.q-term:hover,
+.q-term:focus-visible,
+.q-term.open {
+  background: rgba(207, 107, 107, 0.14);
+  outline: none;
+}
+
+.q-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translate(-50%, 8px) scale(0.94);
+  width: max-content;
+  max-width: 240px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #1d2028;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.2, 1.1, 0.3, 1), visibility 0.22s;
+  z-index: 20;
+  pointer-events: none;
+}
+.q-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1d2028;
+}
+.q-term:hover .q-tip,
+.q-term:focus .q-tip,
+.q-term:focus-visible .q-tip,
+.q-term.open .q-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0) scale(1);
+}
+
+/* ---------- Country card ---------- */
+
+.country-hero { display: flex; align-items: center; gap: 18px; margin-bottom: 14px; }
+
+.country-flag {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 76px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+/* flag emblem overlays (cross, star, circle, etc.) */
+.country-flag .emblem { position: absolute; inset: 0; }
+
+.ideology-card { grid-column: auto; }
+.ideology-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.results-actions { display: flex; justify-content: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+#copy-note { text-align: center; min-height: 1.2em; }
+
+/* ---------- Language switcher ---------- */
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+}
+.lang-switch.hero {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 30px;
+  padding: 10px 12px 10px 16px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.28);
+}
+.lang-globe-slot { display: inline-flex; color: var(--accent); }
+.lang-globe { width: 22px; height: 22px; display: block; }
+.lang-switch.hero .lang-globe { width: 26px; height: 26px; }
+.lang-globe.spin { animation: globeSpin 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes globeSpin {
+  from { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.15); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+.lang-meta { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+.lang-caption { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+.lang-name { font-weight: 700; font-size: 0.92rem; white-space: nowrap; }
+.lang-name[data-swap] { animation: nameSwap 0.4s ease; }
+@keyframes nameSwap {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.lang-options { display: inline-flex; gap: 3px; padding: 3px; border-radius: 999px; background: #12141a; border: 1px solid var(--border); }
+.lang-btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, transform 0.12s;
+}
+.lang-btn:hover { color: var(--text); }
+.lang-btn:active { transform: scale(0.92); }
+.lang-btn.active { color: #0c0f14; background: var(--accent); }
+
+/* ---------- Language wipe transition ---------- */
+
+#lang-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--accent), #7d6bf0);
+  will-change: transform;
+}
+#lang-wipe.wipe-in  { animation: wipeIn 0.27s cubic-bezier(0.7, 0, 0.3, 1) forwards; }
+#lang-wipe.wipe-out { animation: wipeOut 0.42s cubic-bezier(0.7, 0, 0.3, 1) forwards; }
+@keyframes wipeIn {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+@keyframes wipeOut {
+  0%   { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+/* ---------- Language cutscene flag (shown during the switch) ---------- */
+
+#lang-flag {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 95;
+  width: 190px;
+  height: 126px;
+  transform: translate(-50%, -50%) scale(0.5);
+  border-radius: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+}
+#lang-flag.show { animation: langFlagPop 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+@keyframes langFlagPop {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(-8deg); }
+  28%  { opacity: 1; transform: translate(-50%, -50%) scale(1.04) rotate(1.5deg); }
+  62%  { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.12); }
+}
+#lang-flag .lang-flag-emblem { position: absolute; inset: 0; }
+#lang-flag .lang-flag-emblem svg { width: 100%; height: 100%; display: block; }
+#lang-flag .lang-flag-code {
+  position: absolute;
+  left: 50%;
+  bottom: -17px;
+  transform: translateX(-50%);
+  background: #0c0f14;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Country flag background (results) ---------- */
+
+#country-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  background-size: cover;
+  background-position: center;
+}
+#country-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 16, 19, 0.62);
+}
+#country-bg .bg-emblem { position: absolute; inset: 0; }
+body.results-active #country-bg { opacity: 0.4; }
+/* let the flag glow through the result cards while on the results screen */
+body.results-active .result-card {
+  background: rgba(22, 24, 29, 0.74);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+}
+
+/* ---------- Ideology guide (history) ---------- */
+
+.ideology-guide {
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #14161c;
+  overflow: hidden;
+}
+.ideology-guide summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  font-weight: 600;
+  color: var(--text);
+  transition: background 0.15s;
+}
+.ideology-guide summary::-webkit-details-marker { display: none; }
+.ideology-guide summary:hover { background: #191c23; }
+.guide-globe {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #0c0f14;
+  font-size: 0.7rem;
+  font-weight: 800;
+  transition: transform 0.25s ease;
+}
+.ideology-guide[open] .guide-globe { transform: rotate(90deg); }
+/* animated open/close body (height driven by JS; <details> hides it when closed) */
+.ideology-guide .guide-body {
+  overflow: hidden;
+  transition: height 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.guide-intro { padding: 0 16px 4px; color: var(--text-dim); font-size: 0.82rem; opacity: 0; transition: opacity 0.3s ease 0.08s; }
+.ideology-guide[open] .guide-intro { opacity: 1; }
+.guide-list { list-style: none; padding: 8px 16px 16px; display: grid; gap: 12px; }
+.guide-item {
+  display: grid;
+  gap: 2px;
+  padding-left: 12px;
+  border-left: 2px solid var(--accent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.34s ease, transform 0.34s ease;
+}
+.ideology-guide[open] .guide-item { opacity: 1; transform: translateY(0); }
+.ideology-guide[open] .guide-item:nth-child(2)  { transition-delay: 0.03s; }
+.ideology-guide[open] .guide-item:nth-child(3)  { transition-delay: 0.06s; }
+.ideology-guide[open] .guide-item:nth-child(4)  { transition-delay: 0.09s; }
+.ideology-guide[open] .guide-item:nth-child(5)  { transition-delay: 0.12s; }
+.ideology-guide[open] .guide-item:nth-child(6)  { transition-delay: 0.15s; }
+.ideology-guide[open] .guide-item:nth-child(7)  { transition-delay: 0.18s; }
+.ideology-guide[open] .guide-item:nth-child(8)  { transition-delay: 0.21s; }
+.ideology-guide[open] .guide-item:nth-child(9)  { transition-delay: 0.24s; }
+.ideology-guide[open] .guide-item:nth-child(10) { transition-delay: 0.27s; }
+.ideology-guide[open] .guide-item:nth-child(11) { transition-delay: 0.30s; }
+.ideology-guide[open] .guide-item:nth-child(12) { transition-delay: 0.33s; }
+.ideology-guide[open] .guide-item:nth-child(13) { transition-delay: 0.36s; }
+.ideology-guide[open] .guide-item:nth-child(14) { transition-delay: 0.39s; }
+.guide-name { font-weight: 700; font-size: 0.95rem; }
+.guide-desc { color: var(--text-dim); font-size: 0.83rem; line-height: 1.5; }
+
